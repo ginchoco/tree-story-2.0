@@ -3,9 +3,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="main.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+
+    
     <title>Where are your trees from?</title>
 </head>
 <body>
@@ -26,24 +31,23 @@
         <div class="subtitle">Where Earth Trust Comes In</div>
         <div class="body">
             <br>
-            <br>Earth Trust was founded in 1967, and is home to a national research woodland: Paradise Wood. Here, tens of thousands of trees have been planted since 1993 as part of different scientific trials. Using the data collected from these trees will show how well different tree species have grown over the years, and will help determine which species should be being planted now for future use.
+            <br>Earth Trust was founded in 1967, and is home to a national research woodland: Paradise Wood. Here, tens of thousands of trees have been planted since 1993 as part of different scientific trials. Using the data collected from these trees will show how well different tree species have grown over the years, and will help determine which species should be being planted now for future use:
+            <br>
+            <br>
+            <em><b>Black Walnut</b></em> is an important timber species, and was introduced to Europe from the United States in 1629. Earth Trust collected hundreds of black walnut seeds from 45 different regions (or progenies), such as from Ivanka pri Nitre in Slovakia, from Seebarn in Austria, and from Twyford in the United Kingdom. These seeds were planted in 2002, and their growth was measured between 2003 and 2008.
+            <br>
+            <br>
+            <em><b>Hybrid Walnut</b></em> species are created when two different walnut species are crossed together, creating a hybrid which shares characteristics from both of its parents. Earth Trust collected hybrid walnut species from five different countries (or provenances), such as from France and Italy. These seeds were planted in 2003, and their growth was measured between 2003 and 2008.
+        <br>
+        <br>
+        When we try to understand which Hybrid Walnut progeny we must opt for to nicely maintain our woodlands, our first objective is obviously considering which trees indicated the greatest growth rates.
+
         </div>
         
           
     </section>
 
     <section>
-        <!-- <div class="subtitle">Black Walnut</div> -->
-
-        <div class="body">
-            Black walnut is an important timber species, and was introduced to Europe from the United States in 1629. Earth Trust collected hundreds of black walnut seeds from 45 different regions (or progenies), such as from Ivanka pri Nitre in Slovakia, from Seebarn in Austria, and from Twyford in the United Kingdom. These seeds were planted in 2002, and their growth was measured between 2003 and 2008.
-
-            When two different walnut species are crossed together, it creates a hybrid walnut species, which shares characteristics from both of its parents. Earth Trust collected hybrid walnut species from five different countries (or provenances), such as from France and Italy. These seeds were planted in 2003, and their growth was measured between 2003 and 2008.
-        </div>
-
-        <div class="body">
-            When we try to understand which Hybrid Walnut progeny we must opt for to nicely maintain our woodlands, our first objective is obviously considering which trees indicated the greatest growth rates.
-        </div>
         <div class="graph">
             <!-- Add 3 buttons -->
             <button onclick="update('Total_Increment')">Total_Increment</button>
@@ -143,10 +147,41 @@
 
         <div class="body">
             This graph already shows we might tend to narrow down our choice to MJ 209, NG 23, and NG 38. However, note that the total increment, final height, and average height information depicted on this graph only takes into consideration the living and healthy trees of each progeny. If a considerable percentage of planted trees of a particular progeny has died or suffered from diseases, we might still want to discard it regardless of the growth rates shown by the remaining, possibly insignificant proportion of trees of that progeny. The following pie chart depicts the percentages of healthy, diseased, and dead trees of each progeny:
+            <br>
+            <br>
+            Our decision of avoiding Bressanvido and IRTA X-80 is justified by the fact that approximately half of the trees planted of those progenies died. As opposed to those, we can further see that MJ 209, NG 23, and NG 28  do not indicate any dying records at all. Because they show very mild differences in disease rates, it is not possible to make any further clear distinction between them at this point.
+            We might still want to compare NG 23 and NG 38 with each other, as they are obtained by crossing the same two tree species, Juglans nigra and Juglans regia, but from different geographical backgrounds (hence the difference in the enumeration).
 
         </div>
         <div class="graph">
-            
+            <!-- Load d3.js -->
+            <script src="https://d3js.org/d3.v4.js"></script>
+
+            <!-- Color scale -->
+            <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+            <!-- Add 5 buttons -->
+            <button onclick="update(data1)">Bressanvido</button>
+            <button onclick="update(data2)">IRTA X-80</button>
+            <button onclick="update(data3)">MJ209</button>
+            <button onclick="update(data4)">NG23</button>
+            <button onclick="update(data5)">NG28</button>
+
+            <!-- Create a div where the graph will take place -->
+            <div id="my_dataviz1"></div>
+        </div>
+
+        <div class="body">
+            We have previously seen that the final height of NG 38 had a greater mean value than the final height of NG 23. From the above box plot, we observe that the final height of NG 38 has also a greater median value than the final height of NG 23. Although those statistics speak in favour of NG 38, if we delve into finer details, we realize that NG 23 has a broader lower quartile and a wider upper quartile. This demonstrates that the trees of progeny 23 that have a shorter than median are still very close to the median, while those that are taller are considerably above the median. We can also notice some individual outliers in NG 38 that cannot be covered by the whiskers. However, note that having a tree that is too tall at the end is not as alarming as having a tree that is too short and the fact that NG 38 has a smaller interquartile range when compared to NG 23 suppresses the uncertainty in the predictability of the final height of a newly planted tree of the corresponding progeny that arises from the existence of outliers.
+We still seem to be unable to arrive a conclusion, but consider the following graph that shows the average height of the trees of different progenies over the years 2003 – 2008.
+        </div>
+
+        <div class="graph">
+            <!-- Load d3.js -->
+            <!-- <script src="https://d3js.org/d3.v4.js"></script> -->
+
+            <!-- Create a div where the graph will take place -->
+            <!-- <div id="my_dataviz2"></div> -->
         </div>
     </section>
 
