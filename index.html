@@ -4,28 +4,141 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="main.js"></script>
     <title>Where are your trees from?</title>
 </head>
 <body>
     <section>
         <div class="heading">
-            <div class="title">Where are your <br> trees from, <em>really</em>?</div>
-
+            <div class="title">Where are your trees <br> from, <em>really</em>?</div>
+            <div class="tiny-title">By: <a href="https://www.cs.ox.ac.uk/teaching/courses/2020-2021/gdp/timetable.html" class="ref">Group 14</a>
+                and the <a href="https://earthtrust.org.uk/about/our-people/" class="ref">Earth Trust team</a></div>
         </div>
     </section>
 
     <section>
-        <div class="subtitle"></div>
         <div class="body">
-
-        </div>        
+            Trees are vital for life on Earth. They produce the oxygen we breathe, purify the water we drink, produce the medicines we use, and provide habitats for animals. Unfortunately, climate change is posing a great challenge to the trees and forests in England. 
+            <br>
+            <br> England’s weather is heavily influenced by a fast air current which circles round the northern hemisphere of the Earth, called the Jet Stream. This creates a lot of cold and wet weather, which the trees growing in England have adapted to. However, climate change is causing the Jet Stream to change, meaning that the weather is also changing. This creates new, and sometimes extreme, weather conditions, such as warmer summers and floods. The trees which are native to England are not adapted to this warmer weather; some tree species may survive better in this new weather, some may fare worse, and some may not survive at all. Trees from other countries may be better adapted to England’s new weather – for example, trees from hotter countries – so it is important to carry out research into which trees we should plant which will be able to thrive in this unpredictable weather for years to come.
+        </div>      
+        <div class="subtitle">Where Earth Trust Comes In</div>
+        <div class="body">
+            <br>
+            <br>Earth Trust was founded in 1967, and is home to a national research woodland: Paradise Wood. Here, tens of thousands of trees have been planted since 1993 as part of different scientific trials. Using the data collected from these trees will show how well different tree species have grown over the years, and will help determine which species should be being planted now for future use.
+        </div>
+        
+          
     </section>
 
     <section>
-        <div class="subtitle"></div>
-        <div class="graph">
+        <div class="body">
+            <div class="subtitle"></div>
+            Black Walnut
+            Black walnut is an important timber species, and was introduced to Europe from the United States in 1629. Earth Trust collected hundreds of black walnut seeds from 45 different regions (or progenies), such as from Ivanka pri Nitre in Slovakia, from Seebarn in Austria, and from Twyford in the United Kingdom. These seeds were planted in 2002, and their growth was measured between 2003 and 2008.
+            
+            Hybrid Walnut
+            When two different walnut species are crossed together, it creates a hybrid walnut species, which shares characteristics from both of its parents. Earth Trust collected hybrid walnut species from five different countries (or provenances), such as from France and Italy. These seeds were planted in 2003, and their growth was measured between 2003 and 2008.
 
+        </div>
+        <div class="graph">
+           
+
+            <!-- Add 3 buttons -->
+            <button onclick="update('Total_Increment')">Total_Increment</button>
+            <button onclick="update('Final_Height')">Final_Height</button>
+            <button onclick="update('Average_Height')">Average_Height</button>
+
+            <!-- Create a div where the graph will take place -->
+            <div id="my_dataviz"></div>
+
+            <script>
+
+                // set the dimensions and margins of the graph
+                var margin = {top: 30, right: 30, bottom: 70, left: 60},
+                    width = 460 - margin.left - margin.right,
+                    height = 400 - margin.top - margin.bottom;
+                
+                // append the svg object to the body of the page
+                var svg = d3.select("#my_dataviz")
+                  .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                    .attr("transform",
+                          "translate(" + margin.left + "," + margin.top + ")");
+                
+                // Initialize the X axis
+                var x = d3.scaleBand()
+                  .range([ 0, width ])
+                  .padding(1);
+                var xAxis = svg.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                
+                // Initialize the Y axis
+                var y = d3.scaleLinear()
+                  .range([ height, 0]);
+                var yAxis = svg.append("g")
+                  .attr("class", "myYaxis")
+                
+                
+                // A function that create / update the plot for a given variable:
+                function update(selectedVar) {
+                
+                  // Parse the Data
+                  d3.csv("https://raw.githubusercontent.com/ilkercancicek/Group-Design-Practical/main/summary.csv", function(data) {
+                
+                    // X axis
+                    x.domain(data.map(function(d) { return d.Species; }))
+                    xAxis.transition().duration(1000).call(d3.axisBottom(x))
+                
+                    // Add Y axis
+                    y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+                    yAxis.transition().duration(1000).call(d3.axisLeft(y));
+                
+                    // variable j: map data to existing circle
+                    var j = svg.selectAll(".myLine")
+                      .data(data)
+                    // update lines
+                    j
+                      .enter()
+                      .append("line")
+                      .attr("class", "myLine")
+                      .merge(j)
+                      .transition()
+                      .duration(1000)
+                        .attr("x1", function(d) { console.log(x(d.Species)) ; return x(d.Species); })
+                        .attr("x2", function(d) { return x(d.Species); })
+                        .attr("y1", y(0))
+                        .attr("y2", function(d) { return y(d[selectedVar]); })
+                        .attr("stroke", "grey")
+                
+                
+                    // variable u: map data to existing circle
+                    var u = svg.selectAll("circle")
+                      .data(data)
+                    // update bars
+                    u
+                      .enter()
+                      .append("circle")
+                      .merge(u)
+                      .transition()
+                      .duration(1000)
+                        .attr("cx", function(d) { return x(d.Species); })
+                        .attr("cy", function(d) { return y(d[selectedVar]); })
+                        .attr("r", 8)
+                        .attr("fill", "#69b3a2");
+                
+                
+                  })
+                
+                }
+                
+                // Initialize plot
+                update('Total_Increment')
+                
+                </script>
         </div>
         <div class="caption"></div>
     </section>
