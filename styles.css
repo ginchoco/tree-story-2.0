@@ -30,8 +30,19 @@
     font-style: normal;
     }
 
+body{
+    background-color: oldlace;
+}
 .heading{
-    font-family: 'Tiempos Headline Medium';
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+.title{
+    font-family: 'Tiempos Text Regular';
+    font-size: 48px;
+    font-weight: 100;
+    padding: 50px 0 50px 0;
 }
 
 em {
