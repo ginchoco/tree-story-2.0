@@ -29,3 +29,11 @@
     font-weight: normal;
     font-style: normal;
     }
+
+.heading{
+    font-family: 'Tiempos Headline Medium';
+}
+
+em {
+    font-style: italic;
+}
