@@ -1,4 +1,5 @@
 import * as lollipop from "./graphs/lollipop.js";
+import * as piechart from "./graphs/pie_chart.js";
 
 // handles safely loading data
 // returns a promise
@@ -36,6 +37,7 @@ const load_data= () =>
 
 load_data().then(data => {
   lollipop.init("#lollipop", data.hybrid_summary)
+  piechart.init("#piechart", data.pie_data)
 }).catch(error => {
   console.log(`Failed to load and render graphs!\n${error.message}`)
 })

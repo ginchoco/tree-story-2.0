@@ -70,21 +70,15 @@
 
         </div>
         <div class="graph">
-            <!-- Load d3.js -->
-            <script src="https://d3js.org/d3.v4.js"></script>
-
-            <!-- Color scale -->
-            <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
             <!-- Add 5 buttons -->
-            <button onclick="update(data1)">Bressanvido</button>
-            <button onclick="update(data2)">IRTA X-80</button>
-            <button onclick="update(data3)">MJ209</button>
-            <button onclick="update(data4)">NG23</button>
-            <button onclick="update(data5)">NG28</button>
+            <button class="pie_button" id="0">Bressanvido</button>
+            <button class="pie_button" id="1">IRTA X-80</button>
+            <button class="pie_button" id="2">MJ209</button>
+            <button class="pie_button" id="3">NG23</button>
+            <button class="pie_button" id="4">NG28</button>
 
             <!-- Create a div where the graph will take place -->
-            <div id="my_dataviz1"></div>
+            <div id="piechart"></div>
         </div>
 
         <div class="body">
