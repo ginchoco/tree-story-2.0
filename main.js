@@ -1,80 +1,46 @@
-ScrollReveal().reveal('.heading');
+import * as lollipop from "./graphs/lollipop.js";
+import * as piechart from "./graphs/pie_chart.js";
 
-// set the dimensions and margins of the graph
-var width = 450
-    height = 450
-    margin = 60
+// handles safely loading data
+// returns a promise
+// to use, load_data().then(callback)
+const load_data= () =>
+  Promise.all(
+    [ d3.csv("./data/hybrid_summary.csv") ]
+  ).then( ([ hybrid_summary ]) => {
 
-// The radius of the pieplot is approximately half the width or half the height (smallest one). I subtract a bit of margin.
-var radius = Math.min(width, height) * 7 / 16 - margin
+    // parse strings into numeric values
+    const processed_hybrid_sumamry = hybrid_summary.map(row => {
+      row.Total_Increment = +row.Total_Increment
+      row.Final_Height = +row.Final_Height
+      row.Average_Height = +row.Average_Height
+      return row
+    })
 
-// append the svg object to the div called 'my_dataviz'
-var svg = d3.select("#my_dataviz1")
-  .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + (width - 100) / 2 + "," + (height - 100) / 2 + ")");
+    // change this to maybe load from file..
+    const pie_data = [
+      {healthy: 12, diseased: 1, dead: 11},
+      {healthy: 8, diseased: 1, dead: 15},
+      {healthy: 21, diseased: 3, dead: 0},
+      {healthy: 16, diseased: 8, dead: 0},
+      {healthy: 19, diseased: 5, dead: 0},
+    ]
 
-// Handmade legend
-svg.append("circle").attr("cx",150).attr("cy",130).attr("r", 6).style("fill", "rgba(0, 177, 106, 1)")
-svg.append("circle").attr("cx",150).attr("cy",160).attr("r", 6).style("fill", "rgba(246, 71, 71, 1)")
-svg.append("circle").attr("cx",150).attr("cy",190).attr("r", 6).style("fill", "rgba(105, 105, 105 ,1)")
-svg.append("text").attr("x", 170).attr("y", 130).text("healthy").style("font-size", "15px").style("fill", "rgba(0, 177, 106, 1)").attr("alignment-baseline","middle").attr("font-weight", 700)
-svg.append("text").attr("x", 170).attr("y", 160).text("diseased").style("font-size", "15px").style("fill", "rgba(246, 71, 71, 1)").attr("alignment-baseline","middle").attr("font-weight", 700)
-svg.append("text").attr("x", 170).attr("y", 190).text("dead").style("font-size", "15px").style("fill", "rgba(105, 105, 105 ,1)").attr("alignment-baseline","middle").attr("font-weight", 700)
+    return {
+      hybrid_summary: processed_hybrid_sumamry,
+      pie_data: pie_data
+    }
 
-// create data_sets
-var data1 = {healthy: 12, diseased: 1, dead: 11}
-var data2 = {healthy: 8, diseased: 1, dead: 15}
-var data3 = {healthy: 21, diseased: 3, dead: 0}
-var data4 = {healthy: 16, diseased: 8, dead: 0}
-var data5 = {healthy: 19, diseased: 5, dead: 0}
+  }).catch(error => {
+    console.log(`Data load failed!\n${error.message}`)
+  })
 
-// set the color scale
-var color = d3.scaleOrdinal()
-  .domain(["healthy", "diseased", "dead"])
-  .range(["rgba(0, 177, 106, 1)", "rgba(246, 71, 71, 1)", "rgba(105, 105, 105 ,1)"]);
-
-// A function that create / update the plot for a given variable:
-function update(data) {
-
-  // Compute the position of each group on the pie:
-  var pie = d3.pie()
-    .value(function(d) {return d.value; })
-    .sort(function(a, b) { console.log(a) ; return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
-  var data_ready = pie(d3.entries(data))
-
-  // map to data
-  var u = svg.selectAll("path")
-    .data(data_ready)
-
-  // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-  u
-    .enter()
-    .append('path')
-    .merge(u)
-    .transition()
-    .duration(1000)
-    .attr('d', d3.arc()
-      .innerRadius(0)
-      .outerRadius(radius)
-    )
-    .attr('fill', function(d){ return(color(d.data.key)) })
-    .attr("stroke", "white")
-    .style("stroke-width", "2px")
-    .style("opacity", 1)
-
-  // remove the group that is not present anymore
-  u
-    .exit()
-    .remove()
-
-}
-
-// Initialize the plot with the first dataset
-update(data1)
-
+load_data().then(data => {
+  lollipop.init("#lollipop", data.hybrid_summary)
+  piechart.init("#piechart", data.pie_data)
+}).catch(error => {
+  console.log(`Failed to load and render graphs!\n${error.message}`)
+})
 
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 

@@ -3,13 +3,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="main.js"></script>
+
+    <!-- External Dependencies -->
+    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
 
-
+    <script type="module" src="main.js"></script>
     
     <title>Where are your trees from?</title>
 </head>
@@ -50,98 +52,12 @@
     <section>
         <div class="graph">
             <!-- Add 3 buttons -->
-            <button onclick="update('Total_Increment')">Total_Increment</button>
-            <button onclick="update('Final_Height')">Final_Height</button>
-            <button onclick="update('Average_Height')">Average_Height</button>
+            <button class="lol-button" id="Total_Increment">Total_Increment</button>
+            <button class="lol-button" id="Final_Height">Final_Height</button>
+            <button class="lol-button" id="Average_Height">Average_Height</button>
 
             <!-- Create a div where the graph will take place -->
-            <div id="my_dataviz"></div>
-
-            <script>
-
-                // set the dimensions and margins of the graph
-                var margin = {top: 30, right: 30, bottom: 70, left: 60},
-                    width = 460 - margin.left - margin.right,
-                    height = 400 - margin.top - margin.bottom;
-                
-                // append the svg object to the body of the page
-                var svg = d3.select("#my_dataviz")
-                  .append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                  .append("g")
-                    .attr("transform",
-                          "translate(" + margin.left + "," + margin.top + ")");
-                
-                // Initialize the X axis
-                var x = d3.scaleBand()
-                  .range([ 0, width ])
-                  .padding(1);
-                var xAxis = svg.append("g")
-                  .attr("transform", "translate(0," + height + ")")
-                
-                // Initialize the Y axis
-                var y = d3.scaleLinear()
-                  .range([ height, 0]);
-                var yAxis = svg.append("g")
-                  .attr("class", "myYaxis")
-                
-                
-                // A function that create / update the plot for a given variable:
-                function update(selectedVar) {
-                
-                  // Parse the Data
-                  d3.csv("https://raw.githubusercontent.com/ilkercancicek/Group-Design-Practical/main/summary.csv", function(data) {
-                
-                    // X axis
-                    x.domain(data.map(function(d) { return d.Species; }))
-                    xAxis.transition().duration(1000).call(d3.axisBottom(x))
-                
-                    // Add Y axis
-                    y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
-                    yAxis.transition().duration(1000).call(d3.axisLeft(y));
-                
-                    // variable j: map data to existing circle
-                    var j = svg.selectAll(".myLine")
-                      .data(data)
-                    // update lines
-                    j
-                      .enter()
-                      .append("line")
-                      .attr("class", "myLine")
-                      .merge(j)
-                      .transition()
-                      .duration(1000)
-                        .attr("x1", function(d) { console.log(x(d.Species)) ; return x(d.Species); })
-                        .attr("x2", function(d) { return x(d.Species); })
-                        .attr("y1", y(0))
-                        .attr("y2", function(d) { return y(d[selectedVar]); })
-                        .attr("stroke", "grey")
-                
-                
-                    // variable u: map data to existing circle
-                    var u = svg.selectAll("circle")
-                      .data(data)
-                    // update bars
-                    u
-                      .enter()
-                      .append("circle")
-                      .merge(u)
-                      .transition()
-                      .duration(1000)
-                        .attr("cx", function(d) { return x(d.Species); })
-                        .attr("cy", function(d) { return y(d[selectedVar]); })
-                        .attr("r", 8)
-                        .attr("fill", "#69b3a2");
-                
-                
-                  })
-                
-                }
-                
-                // Initialize plot
-                update('Total_Increment')
-                </script>
+            <div id="lollipop"></div>
         </div>
         <div class="caption"></div>
 
@@ -154,21 +70,15 @@
 
         </div>
         <div class="graph">
-            <!-- Load d3.js -->
-            <script src="https://d3js.org/d3.v4.js"></script>
-
-            <!-- Color scale -->
-            <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
             <!-- Add 5 buttons -->
-            <button onclick="update(data1)">Bressanvido</button>
-            <button onclick="update(data2)">IRTA X-80</button>
-            <button onclick="update(data3)">MJ209</button>
-            <button onclick="update(data4)">NG23</button>
-            <button onclick="update(data5)">NG28</button>
+            <button class="pie_button" id="0">Bressanvido</button>
+            <button class="pie_button" id="1">IRTA X-80</button>
+            <button class="pie_button" id="2">MJ209</button>
+            <button class="pie_button" id="3">NG23</button>
+            <button class="pie_button" id="4">NG28</button>
 
             <!-- Create a div where the graph will take place -->
-            <div id="my_dataviz1"></div>
+            <div id="piechart"></div>
         </div>
 
         <div class="body">
@@ -177,9 +87,6 @@ We still seem to be unable to arrive a conclusion, but consider the following gr
         </div>
 
         <div class="graph">
-            <!-- Load d3.js -->
-            <!-- <script src="https://d3js.org/d3.v4.js"></script> -->
-
             <!-- Create a div where the graph will take place -->
             <!-- <div id="my_dataviz2"></div> -->
         </div>
